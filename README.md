@@ -32,8 +32,8 @@ A powerful RTSP video streaming solution that combines the capabilities of reCam
 
 ```bash
 # Clone the repository
-git clone https://github.com/Hey-Salad/recamera-streamer.git
-cd recamera-streamer
+git clone https://github.com/Hey-Salad/videobase-pi.git
+cd videobase-pi
 
 # Create and activate virtual environment
 python -m venv venv
