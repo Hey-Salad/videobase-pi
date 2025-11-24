@@ -142,26 +142,6 @@ const buildOpenAIPrompt = ({ cameraId, name, aiSource, detections, aiTimestamp }
   } at ${timestampDescription}. ${detectionText}. Describe what is happening and suggest a short next action.`;
 };
 
-const OpenAIIcon = ({ className }) => (
-  <svg viewBox="0 0 24 24" className={className} role="img" aria-label="OpenAI">
-    <path
-      d="M12 2 19 5v7l-3 1.5V18l-2 1-2-1v-4.5L5 12V5Z"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M18 6c.4.93.6 1.94.6 2.95 0 3.15-2.5 5.7-5.6 5.7S7.4 12.1 7.4 9c0-.61.11-1.2.34-1.76"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.3"
-      strokeLinecap="round"
-    />
-    <circle cx="12" cy="12" r="5.5" fill="none" stroke="currentColor" strokeWidth="1" />
-  </svg>
-);
-
 const buildDetectionsFromInference = (inference = {}) => {
   const boxes = Array.isArray(inference.boxes) ? inference.boxes : null;
   if (!boxes || boxes.length === 0) {
@@ -580,11 +560,16 @@ const CameraView = ({ cameraId, name, aiSource = 'hailo' }) => {
           disabled={analysisStatus === 'loading'}
           className={`w-full flex items-center justify-center gap-2 text-sm font-semibold rounded-lg px-3 py-2 transition ${
             analysisStatus === 'loading'
-              ? 'bg-blue-500/60 text-white cursor-wait'
-              : 'bg-blue-600 text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400'
+              ? 'bg-black/60 text-white cursor-wait'
+              : 'bg-black text-white hover:bg-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
           }`}
         >
-          <OpenAIIcon className="w-4 h-4" />
+          <img
+            src="https://img.icons8.com/fluency/48/chatgpt.png"
+            alt="ChatGPT"
+            className="w-4 h-4"
+            loading="lazy"
+          />
           <span>{analysisStatus === 'loading' ? 'Analyzing…' : 'OpenAI Analysis'}</span>
         </button>
         {analysisStatus === 'loading' && (
