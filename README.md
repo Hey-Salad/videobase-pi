@@ -16,6 +16,8 @@ A powerful RTSP video streaming solution that combines the capabilities of reCam
 - 🎮 Real-time RTSP streaming
 - 🖥️ Clean web interface powered by Gradio
 - 📊 Live FPS monitoring
+- 🧠 Switch between Hailo-8L and reCamera inference sources with the UI dropdown
+- 📡 Device info panel is collapsible, surfacing a quick summary and full metrics grid
 - 🔄 Automatic reconnection
 - 🌐 Network-wide accessibility
 - 🚀 Low-latency streaming
@@ -71,6 +73,14 @@ The default configuration works with reCamera's standard settings:
 - RTSP URL: `rtsp://admin:admin@192.168.42.1:554/live`
 - Port: 7860
 - Video Format: H.264
+
+### Frontend (.env)
+```
+VITE_WS_URL=ws://localhost:9200/ws
+VITE_API_URL=http://localhost:9200
+```
+
+Leaving these values empty lets the UI derive the backend host from the current page, which is handy when the React app and backend run on the same host (e.g., local dev or Cloudflare Pages).
 
 ## 📱 Accessing the Stream
 
