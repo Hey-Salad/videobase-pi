@@ -16,6 +16,7 @@ A powerful RTSP video streaming solution that combines the capabilities of reCam
 - 🎮 Real-time RTSP streaming
 - 🖥️ Clean web interface powered by Gradio
 - 📊 Live FPS monitoring
+- 🤖 OpenAI GPT-OSS analysis button below each camera stream
 - 🧠 Switch between Hailo-8L and reCamera inference sources with the UI dropdown
 - 📡 Device info panel is collapsible, surfacing a quick summary and full metrics grid
 - 🔄 Automatic reconnection
@@ -78,9 +79,19 @@ The default configuration works with reCamera's standard settings:
 ```
 VITE_WS_URL=ws://localhost:9200/ws
 VITE_API_URL=http://localhost:9200
+VITE_GPT_BACKEND_URL=http://localhost:5000
 ```
 
 Leaving these values empty lets the UI derive the backend host from the current page, which is handy when the React app and backend run on the same host (e.g., local dev or Cloudflare Pages).
+
+### GPT Backend (.env)
+Use the Hugging Face-powered GPT-OSS service located at `/home/admin/heysalad-gpt-oss-kiosk-backend`. Launch the Flask app before clicking the OpenAI analysis button.
+```
+cd /home/admin/heysalad-gpt-oss-kiosk-backend
+source venv/bin/activate
+python heysalad_backend.py
+```
+Set `VITE_GPT_BACKEND_URL` to wherever `heysalad_backend.py` listens (default `http://localhost:5000`) so the UI can hit `/api/ai/recommendation`.
 
 ## 📱 Accessing the Stream
 
