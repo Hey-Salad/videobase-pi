@@ -10,7 +10,7 @@ function App() {
             <img
               src="/heysalad_white_logo.svg"
               alt="HeySalad"
-              className="h-8 w-auto"
+              className="h-12 w-auto"
             />
             <span className="text-xs font-semibold tracking-wide uppercase text-white">
               Videobase Pi
