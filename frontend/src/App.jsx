@@ -4,7 +4,7 @@ function App() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Sticky nav with Logo */}
-      <header className="sticky top-0 z-40 bg-black/90 backdrop-blur border-b border-white/10 shadow-sm">
+      <header className="sticky top-0 z-40 bg-black/90 backdrop-blur shadow-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
           <a href="#" className="flex items-center gap-3">
             <img
