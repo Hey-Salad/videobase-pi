@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Skill - Streamlined UI</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 20px 30px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* Natural Language Input - Zero Friction */
+    .ai-input-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .ai-input-container h2 {
+      font-size: 20px;
+      margin-bottom: 16px;
+      color: #667eea;
+    }
+
+    .ai-input-wrapper {
+      position: relative;
+      display: flex;
+      gap: 12px;
+    }
+
+    #ai-input {
+      flex: 1;
+      padding: 16px 20px;
+      font-size: 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    #ai-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .ai-submit-btn {
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .ai-submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+    }
+
+    .ai-submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .ai-submit-btn.loading {
+      background: #999;
+      cursor: not-allowed;
+    }
+
+    .quick-actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .quick-action {
+      padding: 8px 16px;
+      background: rgba(102, 126, 234, 0.1);
+      border: 1px solid rgba(102, 126, 234, 0.3);
+      border-radius: 20px;
+      font-size: 14px;
+      color: #667eea;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quick-action:hover {
+      background: rgba(102, 126, 234, 0.2);
+      transform: translateY(-1px);
+    }
+
+    /* Response Display */
+    .response-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .response-container.visible {
+      display: block;
+    }
+
+    .response-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .response-header h3 {
+      color: #667eea;
+      font-size: 18px;
+    }
+
+    .execution-time {
+      font-size: 12px;
+      color: #999;
+      background: #f5f5f5;
+      padding: 4px 12px;
+      border-radius: 12px;
+    }
+
+    .response-summary {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      padding: 16px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border-left: 4px solid #667eea;
+    }
+
+    .response-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .detail-card {
+      background: white;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .detail-card-title {
+      font-size: 12px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .detail-card-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .detection-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .detection-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .detection-badge .confidence {
+      margin-left: 6px;
+      background: rgba(255, 255, 255, 0.3);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+
+    .response-image {
+      width: 100%;
+      max-width: 800px;
+      border-radius: 12px;
+      margin-top: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Camera Grid */
+    .camera-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+    }
+
+    .camera-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .camera-card h3 {
+      color: #667eea;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+
+    .camera-video {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      background: #000;
+      margin-bottom: 12px;
+    }
+
+    .camera-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .camera-controls button {
+      flex: 1;
+      min-width: 100px;
+      padding: 10px 16px;
+      background: white;
+      border: 2px solid #667eea;
+      color: #667eea;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .camera-controls button:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .camera-controls button.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-color: transparent;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: pulse 2s infinite;
+    }
+
+    .status-indicator.live {
+      background: #4caf50;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Animations */
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .response-container.visible {
+      animation: slideIn 0.3s ease;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Toast Notifications */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      display: none;
+      align-items: center;
+      gap: 12px;
+      z-index: 1000;
+    }
+
+    .toast.visible {
+      display: flex;
+      animation: slideIn 0.3s ease;
+    }
+
+    .toast.success { border-left: 4px solid #4caf50; }
+    .toast.error { border-left: 4px solid #f44336; }
+    .toast.info { border-left: 4px solid #2196f3; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>🎥 Video Skill - AI Control</h1>
+      <p>Natural language interface powered by OpenClaw</p>
+    </div>
+
+    <!-- AI Input - Zero Friction Interface -->
+    <div class="ai-input-container">
+      <h2>💬 Ask anything about your cameras</h2>
+      <div class="ai-input-wrapper">
+        <input
+          type="text"
+          id="ai-input"
+          placeholder="e.g., 'Show me camera 1' or 'Has anyone been detected in the last hour?'"
+          autofocus
+        />
+        <button class="ai-submit-btn" onclick="processQuery()">
+          <span id="btn-text">Ask</span>
+          <span id="btn-spinner" class="spinner" style="display: none;"></span>
+        </button>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <div class="quick-action" onclick="quickQuery('Show me camera 1')">📷 Show Camera 1</div>
+        <div class="quick-action" onclick="quickQuery('Do a security check')">🔒 Security Scan</div>
+        <div class="quick-action" onclick="quickQuery('Give me a summary')">📊 Activity Summary</div>
+        <div class="quick-action" onclick="quickQuery('Find all people detected today')">👤 Find People</div>
+        <div class="quick-action" onclick="quickQuery('Record camera 1 for 60 seconds')">⏺️ Quick Record</div>
+      </div>
+    </div>
+
+    <!-- AI Response -->
+    <div class="response-container" id="response-container">
+      <div class="response-header">
+        <h3 id="response-title">Response</h3>
+        <span class="execution-time" id="execution-time"></span>
+      </div>
+
+      <div class="response-summary" id="response-summary"></div>
+
+      <div class="response-details" id="response-details"></div>
+
+      <img id="response-image" class="response-image" style="display: none;" />
+    </div>
+
+    <!-- Live Camera Grid -->
+    <div class="camera-grid" id="camera-grid"></div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <span id="toast-message"></span>
+  </div>
+
+  <script>
+    // Configuration
+    const API_BASE = window.location.origin;
+    const WS_BASE = API_BASE.replace('http', 'ws');
+
+    // State
+    let activeCameras = {};
+
+    // ========================================================================
+    // Natural Language Query Processing
+    // ========================================================================
+
+    async function processQuery() {
+      const input = document.getElementById('ai-input');
+      const query = input.value.trim();
+
+      if (!query) return;
+
+      // Update button state
+      const btn = document.querySelector('.ai-submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const btnSpinner = document.getElementById('btn-spinner');
+
+      btn.classList.add('loading');
+      btn.disabled = true;
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-block';
+
+      try {
+        const response = await fetch(`${API_BASE}/agent/query`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query })
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'completed') {
+          displayResponse(data);
+          showToast('Query completed successfully', 'success');
+        } else {
+          showToast(`Error: ${data.error}`, 'error');
+        }
+
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('Failed to process query', 'error');
+      } finally {
+        // Reset button
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        btnText.style.display = 'inline';
+        btnSpinner.style.display = 'none';
+      }
+    }
+
+    function quickQuery(query) {
+      document.getElementById('ai-input').value = query;
+      processQuery();
+    }
+
+    // Handle Enter key
+    document.getElementById('ai-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') processQuery();
+    });
+
+    // ========================================================================
+    // Response Display
+    // ========================================================================
+
+    function displayResponse(data) {
+      const container = document.getElementById('response-container');
+      const title = document.getElementById('response-title');
+      const summary = document.getElementById('response-summary');
+      const details = document.getElementById('response-details');
+      const image = document.getElementById('response-image');
+      const execTime = document.getElementById('execution-time');
+
+      // Clear previous
+      details.innerHTML = '';
+      image.style.display = 'none';
+
+      // Set title and execution time
+      title.textContent = formatWorkflowType(data.workflow_type);
+      execTime.textContent = `${data.execution_time_ms.toFixed(0)}ms`;
+
+      const result = data.result;
+
+      // Route to appropriate display handler
+      switch (data.workflow_type) {
+        case 'smart_capture':
+          displaySmartCapture(result, summary, details, image);
+          break;
+        case 'security_scan':
+          displaySecurityScan(result, summary, details);
+          break;
+        case 'object_search':
+          displayObjectSearch(result, summary, details);
+          break;
+        case 'summary_report':
+          displaySummaryReport(result, summary, details);
+          break;
+        case 'auto_record':
+          displayAutoRecord(result, summary, details);
+          break;
+        default:
+          summary.textContent = JSON.stringify(result, null, 2);
+      }
+
+      // Show container
+      container.classList.add('visible');
+    }
+
+    function displaySmartCapture(result, summary, details, image) {
+      summary.textContent = result.summary;
+
+      // Camera info
+      details.innerHTML = `
+        <div class="detail-card">
+          <div class="detail-card-title">Camera</div>
+          <div class="detail-card-value">${result.camera_id}</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-title">Detections</div>
+          <div class="detail-card-value">${result.detections.length}</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-title">Timestamp</div>
+          <div class="detail-card-value" style="font-size: 16px;">
+            ${new Date(result.timestamp * 1000).toLocaleTimeString()}
+          </div>
+        </div>
+      `;
+
+      // Detection badges
+      if (result.detections.length > 0) {
+        const badgesHtml = result.detections.map(d =>
+          `<div class="detection-badge">
+            ${d.class_name}
+            <span class="confidence">${(d.confidence * 100).toFixed(0)}%</span>
+          </div>`
+        ).join('');
+
+        details.innerHTML += `
+          <div class="detail-card" style="grid-column: 1 / -1;">
+            <div class="detail-card-title">Objects Detected</div>
+            <div class="detection-list">${badgesHtml}</div>
+          </div>
+        `;
+      }
+
+      // Show image
+      if (result.frame) {
+        image.src = 'data:image/jpeg;base64,' + result.frame;
+        image.style.display = 'block';
+      }
+    }
+
+    function displaySecurityScan(result, summary, details) {
+      const status = result.security_status === 'all_clear' ? '✅ All Clear' : '⚠️ Alerts Detected';
+      summary.textContent = `Security Status: ${status}`;
+
+      details.innerHTML = `
+        <div class="detail-card">
+          <div class="detail-card-title">Cameras Scanned</div>
+          <div class="detail-card-value">${result.cameras_scanned}</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-title">Alerts</div>
+          <div class="detail-card-value">${result.alerts.length}</div>
+        </div>
+      `;
+
+      // Camera details
+      if (result.camera_details) {
+        const cameraDetailsHtml = result.camera_details.map(cam => {
+          const statusIcon = cam.status === 'clear' ? '✅' : '⚠️';
+          const concernsText = cam.concerns.length > 0 ? cam.concerns.join(', ') : 'No concerns';
+
+          return `
+            <div class="detail-card">
+              <div class="detail-card-title">${cam.camera_id} ${statusIcon}</div>
+              <div style="font-size: 14px; margin-top: 8px;">${concernsText}</div>
+            </div>
+          `;
+        }).join('');
+
+        details.innerHTML += cameraDetailsHtml;
+      }
+    }
+
+    function displayObjectSearch(result, summary, details) {
+      summary.textContent = `Found ${result.total_detections} ${result.object_class} detections. ${result.timeline}`;
+
+      details.innerHTML = `
+        <div class="detail-card">
+          <div class="detail-card-title">Object</div>
+          <div class="detail-card-value" style="font-size: 18px;">${result.object_class}</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-title">Total Found</div>
+          <div class="detail-card-value">${result.total_detections}</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-title">Camera</div>
+          <div class="detail-card-value" style="font-size: 18px;">${result.camera_id || 'All'}</div>
+        </div>
+      `;
+    }
+
+    function displaySummaryReport(result, summary, details) {
+      summary.textContent = result.summary;
+
+      const stats = result.statistics;
+      const topClass = Object.entries(stats.class_counts || {})
+        .sort((a, b) => b[1] - a[1])[0];
+
+      details.innerHTML = `
+        <div class="detail-card">
+          <div class="detail-card-title">Total Detections</div>
+          <div class="detail-card-value">${stats.total_detections}</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-title">Recordings</div>
+          <div class="detail-card-value">${result.recordings.count}</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-title">Top Detection</div>
+          <div class="detail-card-value" style="font-size: 16px;">
+            ${topClass ? topClass[0] : 'N/A'}
+          </div>
+        </div>
+      `;
+    }
+
+    function displayAutoRecord(result, summary, details) {
+      summary.textContent = `Recording ${result.status} for ${result.camera_id}`;
+
+      details.innerHTML = `
+        <div class="detail-card">
+          <div class="detail-card-title">Recording ID</div>
+          <div class="detail-card-value">${result.recording_id}</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-title">Duration</div>
+          <div class="detail-card-value">${result.duration_seconds}s</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-title">Detections</div>
+          <div class="detail-card-value">${result.detection_count || 0}</div>
+        </div>
+      `;
+    }
+
+    function formatWorkflowType(type) {
+      return type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    }
+
+    // ========================================================================
+    // Camera Grid
+    // ========================================================================
+
+    async function loadCameras() {
+      try {
+        const response = await fetch(`${API_BASE}/cameras`);
+        const data = await response.json();
+
+        const grid = document.getElementById('camera-grid');
+
+        data.cameras.forEach(camera => {
+          const card = document.createElement('div');
+          card.className = 'camera-card';
+          card.id = `camera-${camera.id}`;
+          card.innerHTML = `
+            <h3>
+              <span class="status-indicator live"></span>
+              ${camera.name}
+            </h3>
+            <img id="video-${camera.id}" class="camera-video" alt="${camera.name}">
+            <div class="camera-controls">
+              <button onclick="quickQuery('Show me ${camera.id}')">📸 Capture</button>
+              <button onclick="quickQuery('Record ${camera.id} for 60 seconds')">⏺️ Record</button>
+            </div>
+          `;
+          grid.appendChild(card);
+
+          // Auto-start stream for first camera only (reduce load)
+          if (camera.id === 'camera1') {
+            connectStream(camera.id);
+          }
+        });
+      } catch (error) {
+        console.error('Failed to load cameras:', error);
+        showToast('Failed to load cameras', 'error');
+      }
+    }
+
+    function connectStream(cameraId) {
+      const ws = new WebSocket(`${WS_BASE}/ws/${cameraId}/stream?detections=true`);
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.type === 'frame') {
+          document.getElementById(`video-${cameraId}`).src =
+            'data:image/jpeg;base64,' + data.frame;
+        }
+      };
+
+      ws.onerror = (error) => {
+        console.error(`WebSocket error for ${cameraId}:`, error);
+      };
+
+      ws.onclose = () => {
+        setTimeout(() => connectStream(cameraId), 5000);
+      };
+
+      activeCameras[cameraId] = ws;
+    }
+
+    // ========================================================================
+    // Toast Notifications
+    // ========================================================================
+
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toast');
+      const messageEl = document.getElementById('toast-message');
+
+      messageEl.textContent = message;
+      toast.className = `toast ${type} visible`;
+
+      setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 3000);
+    }
+
+    // ========================================================================
+    // Initialize
+    // ========================================================================
+
+    // Load cameras on page load
+    loadCameras();
+  </script>
+</body>
+</html>
